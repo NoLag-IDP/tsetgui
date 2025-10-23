@@ -218,75 +218,75 @@ local luckyTab = createTab("Spawn Lucky Blocks",5)
 
 -- --- SPINNER TAB CONTENT
 do
-	local section = mkSection(spawnerTab,"Spawn Brainrots")
-	local nameBox = mkTextBox(section,"Pet Name","Strawberry Elephant")
-	local mutBox = mkTextBox(section,"Mutation","Normal")
-	local spawnBtn = mkButton(section,"SPAWN",function()
-		sendInvokeExact("spawnbrainrot",{nameBox.Text,mutBox.Text})
-	end, Color3.fromRGB(255,100,100))
-	centerButton(spawnBtn)
+    local section = mkSection(spawnerTab,"Spawn Brainrots")
+    local nameBox = mkTextBox(section,"Pet Name","Strawberry Elephant")
+    local mutBox = mkTextBox(section,"Mutation","Normal")
+    local spawnBtn = mkButton(section,"SPAWN",function()
+        sendInvokeExact("spawnbrainrot",{nameBox.Text,mutBox.Text})
+    end, Color3.fromRGB(255,100,100))
+    centerButton(spawnBtn)
 end
 
--- --- EVENT TAB CONTENT WITH TEXTBOX
+-- --- EVENT TAB CONTENT
 do
-	local section = mkSection(eventTab,"Execute Events")
-	
-	-- TextBox to type event
-	local eventBox = mkTextBox(section, "Type Event Name")
-	eventBox.LayoutOrder = 1
+    local section = mkSection(eventTab,"Execute Events")
 
-	-- Execute all events button
-	local execAllBtn = mkButton(section,"EXECUTE ALL EVENTS",function()
-		sendInvokeExact("executeallevents",{})
-	end, Color3.fromRGB(255,100,100))
-	execAllBtn.LayoutOrder = 2
-	centerButton(execAllBtn)
+    -- TextBox to type event
+    local eventBox = mkTextBox(section, "Type Event Name")
+    eventBox.LayoutOrder = 1
 
-	-- Execute typed event button
-	local execBtn = mkButton(section,"EXECUTE TYPED EVENT",function()
-		local typedEvent = eventBox.Text
-		if typedEvent == "" then
-			return warn("⚠️ Type an event first")
-		end
-		sendInvokeExact("executeevent",{typedEvent})
-	end, Color3.fromRGB(255,100,100))
-	execBtn.LayoutOrder = 3
-	centerButton(execBtn)
+    -- Execute typed event button
+    local execBtn = mkButton(section,"EXECUTE TYPED EVENT",function()
+        local typedEvent = eventBox.Text
+        if typedEvent == "" then
+            return warn("⚠️ Type an event first")
+        end
+        sendInvokeExact("executeevent",{typedEvent})
+    end, Color3.fromRGB(255,100,100))
+    centerButton(execBtn)
+    execBtn.LayoutOrder = 2
+
+    -- Execute all events button
+    local execAllBtn = mkButton(section,"EXECUTE ALL EVENTS",function()
+        sendInvokeExact("executeallevents",{})
+    end, Color3.fromRGB(255,100,100))
+    centerButton(execAllBtn)
+    execAllBtn.LayoutOrder = 3
 end
 
 -- --- MONEY TAB CONTENT
 do
-	local section = mkSection(moneyTab,"Add Money")
-	local moneyBox = mkTextBox(section,"Money Amount")
-	local addMoneyBtn = mkButton(section,"ADD MONEY",function()
-		local val = parseNumber(moneyBox.Text)
-		if not val then return warn("⚠️ Invalid Amount") end
-		sendInvokeExact("setmoney",{val})
-	end, Color3.fromRGB(255,100,100))
-	centerButton(addMoneyBtn)
+    local section = mkSection(moneyTab,"Add Money")
+    local moneyBox = mkTextBox(section,"Money Amount")
+    local addMoneyBtn = mkButton(section,"ADD MONEY",function()
+        local val = parseNumber(moneyBox.Text)
+        if not val then return warn("⚠️ Invalid Amount") end
+        sendInvokeExact("setmoney",{val})
+    end, Color3.fromRGB(255,100,100))
+    centerButton(addMoneyBtn)
 end
 
 -- --- REBIRTH TAB CONTENT
 do
-	local section = mkSection(rebirthTab,"Set Rebirth")
-	local rebirthBox = mkTextBox(section,"Rebirth Amount")
-	local rebirthBtn = mkButton(section,"SET REBIRTH",function()
-		local val = parseNumber(rebirthBox.Text)
-		if not val then return warn("⚠️ Invalid Amount") end
-		sendInvokeExact("setrebirth",{val})
-	end, Color3.fromRGB(255,100,100))
-	centerButton(rebirthBtn)
+    local section = mkSection(rebirthTab,"Set Rebirth")
+    local rebirthBox = mkTextBox(section,"Rebirth Amount")
+    local rebirthBtn = mkButton(section,"SET REBIRTH",function()
+        local val = parseNumber(rebirthBox.Text)
+        if not val then return warn("⚠️ Invalid Amount") end
+        sendInvokeExact("setrebirth",{val})
+    end, Color3.fromRGB(255,100,100))
+    centerButton(rebirthBtn)
 end
 
 -- --- LUCKY BLOCK TAB CONTENT
 do
-	local section = mkSection(luckyTab,"Spawn Lucky Blocks")
-	local nameBox = mkTextBox(section,"Block Name","Secret Lucky Block")
-	local mutBox = mkTextBox(section,"Mutation","Normal")
-	local spawnBlockBtn = mkButton(section,"SPAWN",function()
-		sendInvokeExact("spawnluckyblock",{nameBox.Text,mutBox.Text})
-	end, Color3.fromRGB(255,100,100))
-	centerButton(spawnBlockBtn)
+    local section = mkSection(luckyTab,"Spawn Lucky Blocks")
+    local nameBox = mkTextBox(section,"Block Name","Secret Lucky Block")
+    local mutBox = mkTextBox(section,"Mutation","Normal")
+    local spawnBlockBtn = mkButton(section,"SPAWN",function()
+        sendInvokeExact("spawnluckyblock",{nameBox.Text,mutBox.Text})
+    end, Color3.fromRGB(255,100,100))
+    centerButton(spawnBlockBtn)
 end
 
 -- INITIALIZE FIRST TAB
