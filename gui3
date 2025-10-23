@@ -230,71 +230,73 @@ do
 	centerButton(spawnBtn)
 end
 
--- EVENT TAB CONTENT (SPV-style dropdown)
+-- --- EVENT TAB CONTENT (SPV-style dropdown fixed)
 do
-	local section = mkSection(eventTab,"Execute Events")
-	local selectedEvent = nil
+    local section = mkSection(eventTab, "Execute Events")
+    local selectedEvent = nil
 
-	local dropBtn = mkButton(section,"Choose Event ▾",function()
-		dropFrame.Visible = not dropFrame.Visible
-	end, Color3.fromRGB(55,65,80))
-	dropBtn.TextXAlignment = Enum.TextXAlignment.Left
-	padL(dropBtn,8)
-	dropBtn.LayoutOrder = 1
+    -- Event button that toggles dropdown
+    local dropBtn = mkButton(section, "Choose Event ▾", function()
+        dropFrame.Visible = not dropFrame.Visible
+    end, Color3.fromRGB(55, 65, 80))
+    dropBtn.TextXAlignment = Enum.TextXAlignment.Left
+    padL(dropBtn, 8)
+    dropBtn.LayoutOrder = 1
 
-	local execAllBtn = mkButton(section,"EXECUTE ALL EVENTS",function()
-		sendInvokeExact("executeallevents",{})
-	end, Color3.fromRGB(255,100,100))
-	execAllBtn.LayoutOrder = 2
-	centerButton(execAllBtn)
+    -- Execute buttons
+    local execAllBtn = mkButton(section, "EXECUTE ALL EVENTS", function()
+        sendInvokeExact("executeallevents", {})
+    end, Color3.fromRGB(255, 100, 100))
+    execAllBtn.LayoutOrder = 2
+    centerButton(execAllBtn)
 
-	local execBtn = mkButton(section,"EXECUTE SELECTED",function()
-		if not selectedEvent then return warn("⚠️ Choose an event first") end
-		sendInvokeExact("executeevent",{selectedEvent})
-	end, Color3.fromRGB(255,100,100))
-	execBtn.LayoutOrder = 3
-	centerButton(execBtn)
+    local execBtn = mkButton(section, "EXECUTE SELECTED", function()
+        if not selectedEvent then return warn("⚠️ Choose an event first") end
+        sendInvokeExact("executeevent", {selectedEvent})
+    end, Color3.fromRGB(255, 100, 100))
+    execBtn.LayoutOrder = 3
+    centerButton(execBtn)
 
-	local dropFrame = Instance.new("Frame", section)
-	dropFrame.BackgroundColor3 = Color3.fromRGB(25,27,35)
-	dropFrame.BorderSizePixel = 0
-	dropFrame.Size = UDim2.new(1,0,0,0)
-	dropFrame.Visible = false
-	r(dropFrame, 6)
-	dropFrame.LayoutOrder = 4
-	dropFrame.ZIndex = 2
+    -- Dropdown frame (parented to tab frame, not section)
+    local dropFrame = Instance.new("Frame", tabFrames["Execute Events"])
+    dropFrame.Size = UDim2.new(0, dropBtn.AbsoluteSize.X, 0, 0)
+    dropFrame.Position = dropBtn.Position + UDim2.new(0, 0, 0, dropBtn.AbsoluteSize.Y + 2)
+    dropFrame.BackgroundColor3 = Color3.fromRGB(25, 27, 35)
+    dropFrame.BorderSizePixel = 0
+    dropFrame.Visible = false
+    r(dropFrame, 8)
+    dropFrame.ClipsDescendants = true
 
-	local dropScroll = Instance.new("ScrollingFrame", dropFrame)
-	dropScroll.Size = UDim2.new(1,-6,1,-6)
-	dropScroll.Position = UDim2.fromOffset(3,3)
-	dropScroll.BackgroundTransparency = 1
-	dropScroll.BorderSizePixel = 0
-	dropScroll.ScrollBarThickness = 3
-	dropScroll.ScrollBarImageColor3 = Color3.fromRGB(88,101,242)
-	dropScroll.CanvasSize = UDim2.new(0,0,0,0)
-	dropScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    -- Scrolling frame inside dropdown
+    local dropScroll = Instance.new("ScrollingFrame", dropFrame)
+    dropScroll.Size = UDim2.new(1, -6, 1, -6)
+    dropScroll.Position = UDim2.fromOffset(3, 3)
+    dropScroll.BackgroundTransparency = 1
+    dropScroll.BorderSizePixel = 0
+    dropScroll.ScrollBarThickness = 3
+    dropScroll.ScrollBarImageColor3 = Color3.fromRGB(88, 101, 242)
 
-	local dropLayout = Instance.new("UIListLayout", dropScroll)
-	dropLayout.Padding = UDim.new(0,2)
-	dropLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    local dropLayout = Instance.new("UIListLayout", dropScroll)
+    dropLayout.Padding = UDim.new(0, 2)
 
-	for _, evtName in ipairs(EVENT_LIST) do
-		local item = mkButton(dropScroll, evtName, function()
-			selectedEvent = evtName
-			dropBtn.Text = evtName.." ▾"
-			dropFrame.Visible = false
-		end, Color3.fromRGB(35,37,45))
-		item.TextSize = 9
-		item.TextXAlignment = Enum.TextXAlignment.Left
-		r(item,5)
-		padL(item,8)
-	end
+    -- Add event items
+    for _, evtName in ipairs(EVENT_LIST) do
+        local item = mkButton(dropScroll, evtName, function()
+            selectedEvent = evtName
+            dropBtn.Text = evtName .. " ▾"
+            dropFrame.Visible = false
+        end, Color3.fromRGB(35, 37, 45))
+        item.TextSize = 9
+        item.TextXAlignment = Enum.TextXAlignment.Left
+        r(item, 5)
+        padL(item, 8)
+    end
 
-	dropLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-		local contentSize = dropLayout.AbsoluteContentSize.Y + 4
-		dropScroll.CanvasSize = UDim2.new(0,0,0,contentSize)
-		dropFrame.Size = UDim2.new(1,0,0,math.min(contentSize,150))
-	end)
+    -- Update dropdown height based on content
+    dropLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        dropScroll.CanvasSize = UDim2.new(0, 0, 0, dropLayout.AbsoluteContentSize.Y + 4)
+        dropFrame.Size = UDim2.new(dropFrame.Size.X.Scale, dropFrame.Size.X.Offset, 0, math.min(dropLayout.AbsoluteContentSize.Y + 6, 200))
+    end)
 end
 
 -- MONEY TAB
